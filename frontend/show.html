@@ -59,12 +59,12 @@
         }
 
         // Function to recursively render the sponsor tree
-        function renderSponsorTree(sponsors) {
+        function renderSponsorTree(sponsors, amn) {
             let html = '<ul>';
-            sponsors.forEach(sponsor => {
+            sponsors.forEach((sponsor, amn) => {
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id})
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) - (Amount: ${sponsor.id === amn.id ? amn.totalAmount : null})
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
@@ -79,7 +79,7 @@
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
                 const amn = response.data[1];
                 const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
-                const treeHtml = renderSponsorTree(sponsorTree);  // Render the tree into HTML
+                const treeHtml = renderSponsorTree(sponsorTree, amn);  // Render the tree into HTML
                 console.log(sponsorTree);
                 document.getElementById("show").innerHTML = treeHtml;  // Display the tree on the page
             }).catch((error) => {
