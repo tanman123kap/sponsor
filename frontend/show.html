@@ -44,10 +44,10 @@
             const rootSponsors = [];
             // Build the tree structure where sponsor_id is the child and id is the parent
             sponsors.forEach(sponsor => {
-                if (sponsor.sponsor_id !== -1) {
+                if(sponsor.sponsor_id !== -1) {
                     // If the sponsor has a sponsor_id, it's a child of another sponsor (id is parent)
                     const parent = sponsorMap.get(sponsor.sponsor_id);
-                    if (parent) {
+                    if(parent) {
                         parent.children.push(sponsorMap.get(sponsor.id));
                     }
                 } else {
