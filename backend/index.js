@@ -33,8 +33,8 @@ app.get("/show.html", async (req, res) => {
 app.post("/form", async (req, res) => {
     try {
         const { sponsor_id, id, name } = req.body;
-        const user_id = await sponsorModel.exists({sponsor_id});
-        console.log(user_id)
+        const user_id = await sponsorModel.exists({ sponsor_id });
+        console.log(user_id);
         if(user_id) {
             const formData = {
                 sponsor_id: Number(sponsor_id),
@@ -44,7 +44,7 @@ app.post("/form", async (req, res) => {
             const formEntry = await sponsorModel.create(formData);
             res.status(201).json(formEntry);
         } else {
-            res.status(404).json(`not exist`);
+            res.status(404).json(`${user_id} not exist`);
         }
     } catch (error) {
         res.status(422).json(error);
