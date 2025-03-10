@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="show"></div>
+    <!-- <script>
+        // Fetch data from the '/show' API route when the page loads
+        window.onload = function() {
+            axios.get("http://localhost:5000/show").then((response) => {
+                // Display the sponsor data in a formatted way
+                const sponsors = response.data;
+                let htmlContent = '<ul>'; // Start an unordered list
+                sponsors.forEach(sponsor => {
+                    htmlContent += `
+                        <li>
+                            <strong>${sponsor.name}</strong> (Sponsor ID: ${sponsor.sponsor_id}, User ID: ${sponsor.id})
+                        </li>
+                    `;
+                });
+                htmlContent += '</ul>'; // Close the unordered list
+                document.getElementById("show").innerHTML = htmlContent;
+            }).catch((error) => {
+                console.error('Error fetching data:', error);
+                alert('Error loading sponsor data.');
+            });
+        };
+    </script> -->
+    <script>
+        // Function to transform the flat list of sponsors into a tree structure
+        function buildSponsorTree(sponsors) {
+            console.log(sponsors);
+            const sponsorMap = new Map();
+
+            // Map each sponsor by its ID for easy access
+            sponsors.forEach(sponsor => {
+                sponsorMap.set(sponsor.id, {...sponsor, children: []});
+            });
+
+            const rootSponsors = [];
+            // Build the tree structure where sponsor_id is the child and id is the parent
+            sponsors.forEach(sponsor => {
+                if (sponsor.sponsor_id !== -1) {
+                    // If the sponsor has a sponsor_id, it's a child of another sponsor (id is parent)
+                    const parent = sponsorMap.get(sponsor.sponsor_id);
+                    if (parent) {
+                        parent.children.push(sponsorMap.get(sponsor.id));
+                    }
+                } else {
+                    // If sponsor_id is null, it is a root sponsor (top-level)
+                    rootSponsors.push(sponsorMap.get(sponsor.id));
+                }
+            });
+            return rootSponsors;  // Return the root nodes which form the tree
+        }
+
+        // Function to recursively render the sponsor tree
+        function renderSponsorTree(sponsors) {
+            let html = '<ul>';
+            sponsors.forEach(sponsor => {
+                html += `
+                    <li>
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id})
+                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
+                    </li>
+                `;
+            });
+            html += '</ul>';
+            return html;  // Return the HTML representation of the tree
+        }
+
+        // Fetch sponsor data from the server and process it into a tree structure
+        window.onload = function() {
+            axios.get("http://localhost:5000/show").then((response) => {
+                const sponsors = response.data;  // Extract the sponsor data from the response
+                const sponsorTree = buildSponsorTree(sponsors);  // Build the tree from the flat list
+                const treeHtml = renderSponsorTree(sponsorTree);  // Render the tree into HTML
+                console.log(sponsorTree);
+                document.getElementById("show").innerHTML = treeHtml;  // Display the tree on the page
+            }).catch((error) => {
+                console.error('Error fetching data:', error);  // Handle any errors
+                alert('Error loading sponsor data.');
+            });
+        };
+    </script>
+</body>
+</html>
