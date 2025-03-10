@@ -55,7 +55,15 @@ app.post("/form", async (req, res) => {
 app.get("/show", async (req, res) => {
     try {
         const data = await sponsorModel.find();
-        const amount = await amountModel.distinct('id');
+        const amount = await amountModel.aggregate([
+            {
+                $group:
+                {
+                    _id: "$id",
+                    totalAmount: { $sum: "$amount" }
+                }
+            }
+        ]);
         res.status(200).json([data, amount]);
     } catch (error) {
         res.status(500).json(error);
