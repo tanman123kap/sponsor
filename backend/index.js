@@ -64,7 +64,7 @@ app.get("/show", async (req, res) => {
                 } 
             } 
         }]);
-        res.status(200).json([data, amn]);
+        res.status(200).json(amount);
     } catch (error) {
         res.status(500).json(error);
     }
