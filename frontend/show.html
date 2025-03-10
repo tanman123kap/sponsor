@@ -64,9 +64,7 @@
             sponsors.forEach(sponsor => {
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amn.map(e => {
-                            return sponsor.id === e._id;
-                        }) ? `- Amount: ${amn.totalAmount}` : ''}
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amn.find(e => sponsor.id === e._id) ? `- Amount: ${amn.totalAmount}` : ''}
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
