@@ -61,7 +61,7 @@
         // Function to recursively render the sponsor tree
         function renderSponsorTree(sponsors, amnMap) {
             let html = '<ul>';
-            sponsors.forEach((sponsor, amn) => {
+            sponsors.forEach((sponsor, amnMap) => {
                 const amount = amnMap.get(sponsor._id);  // Get the amount for the sponsor
                 html += `
                     <li>
