@@ -70,7 +70,8 @@ app.post("/amount", async (req, res) => {
             if (exists) {
               return true;
             }
-          });
+        });
+        console.log(user);
         if(user) {
             const amn = {
                 id: id,
