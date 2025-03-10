@@ -62,14 +62,12 @@
         function renderSponsorTree(sponsors, amn) {
             let html = '<ul>';
             sponsors.forEach(sponsor => {
-                amn.forEach(amnm => {
-                    html += `
-                        <li>
-                            <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${sponsor.id === amnm._id ? `- Amount: ${amnm.totalAmount}` : ''}
-                            ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children, amn) : ''}
-                        </li>
-                    `;
-                });
+                html += `
+                    <li>
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${sponsor.id === amn._id ? `- Amount: ${amn.totalAmount}` : ''}
+                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children, amn) : ''}
+                    </li>
+                `;
             });
             html += '</ul>';
             return html;  // Return the HTML representation of the tree
