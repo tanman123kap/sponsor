@@ -1,7 +1,8 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-const sponsorModel = require("./models/sponsor.model");
+const sponsorModel = require("./models/sponsor.model.js");
+const amountModel = require("./models/amount.model.js");
 const cors = require("cors");
 const app = express();
 
@@ -33,7 +34,6 @@ app.get("/show.html", async (req, res) => {
 app.post("/form", async (req, res) => {
     try {
         const { sponsor_id, id, name } = req.body;
-        console.log(req.body.sponsor_id);
         const user_id = await sponsorModel.findOne({ id: sponsor_id });
         console.log(user_id);
         if(user_id) {
@@ -55,7 +55,32 @@ app.post("/form", async (req, res) => {
 app.get("/show", async (req, res) => {
     try {
         const data = await sponsorModel.find();
-        res.status(200).json(data);
+        const amount = await amountModel.find();
+        res.status(200).json([data, amount]);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+app.post("/amount", async (req, res) => {
+    try {
+        const { id, amount } = req.body;
+        const user = await amountModel.find().forEach(async function(doc) {
+            let exists = await sponsorModel.findOne({ id: doc.id });
+            if (exists) {
+              return true;
+            }
+          });
+        if(user) {
+            const amn = {
+                id: id,
+                amount: amount
+            };
+            const amnData = await amountModel.create(amn);
+            res.status(201).json(amnData);
+        } else {
+            res.status(404).json(error);
+        }
     } catch (error) {
         res.status(500).json(error);
     }

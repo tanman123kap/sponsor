@@ -76,7 +76,7 @@
         // Fetch sponsor data from the server and process it into a tree structure
         window.onload = function() {
             axios.get("https://sponsor-backend.vercel.app/show").then((response) => {
-                const sponsors = response.data;  // Extract the sponsor data from the response
+                const sponsors = response[0].data;  // Extract the sponsor data from the response
                 const sponsorTree = buildSponsorTree(sponsors);  // Build the tree from the flat list
                 const treeHtml = renderSponsorTree(sponsorTree);  // Render the tree into HTML
                 console.log(sponsorTree);
