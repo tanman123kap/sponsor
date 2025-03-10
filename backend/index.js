@@ -7,7 +7,7 @@ const app = express();
 
 app.use(cors(
     {
-        origin: ["https://project1-lpbh.vercel.app"],
+        origin: ["https://sponsor-frontend-two.vercel.app"],
         methods: ["POST", "GET"],
         credentials: true
     }
