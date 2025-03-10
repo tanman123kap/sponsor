@@ -33,7 +33,7 @@ app.get("/show.html", async (req, res) => {
 app.post("/form", async (req, res) => {
     try {
         const { sponsor_id, id, name } = req.body;
-        const user_id = await sponsorModel.exists({ sponsor_id: Number(sponsor_id) });
+        const user_id = await sponsorModel.findOne({ sponsor_id: Number(sponsor_id) });
         console.log(user_id);
         if(user_id) {
             const formData = {
