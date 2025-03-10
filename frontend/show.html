@@ -32,8 +32,8 @@
     </script> -->
     <script>
         // Function to transform the flat list of sponsors into a tree structure
-        function buildSponsorTree(sponsors) {
-            console.log(sponsors);
+        function buildSponsorTree(sponsors, amn) {
+            console.log(sponsors, amn);
             const sponsorMap = new Map();
 
             // Map each sponsor by its ID for easy access
@@ -77,7 +77,8 @@
         window.onload = function() {
             axios.get("https://sponsor-backend.vercel.app/show").then((response) => {
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
-                const sponsorTree = buildSponsorTree(sponsors);  // Build the tree from the flat list
+                const amn = response.data[1];
+                const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
                 const treeHtml = renderSponsorTree(sponsorTree);  // Render the tree into HTML
                 console.log(sponsorTree);
                 document.getElementById("show").innerHTML = treeHtml;  // Display the tree on the page
