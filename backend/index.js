@@ -65,15 +65,7 @@ app.get("/show", async (req, res) => {
 app.post("/amount", async (req, res) => {
     try {
         const { id, amount } = req.body;
-        const user = false;
-        const amnDocs =  await amountModel.find();
-        for(const doc of amnDocs) {
-            const exists = await sponsorModel.findOne({ id: doc.id });
-            if (exists) {
-                user = true;
-                break;  // No need to continue once a match is found
-            }
-        }
+        const user = await sponsorModel.find({id});
         if(user) {
             const amn = {
                 id: id,
