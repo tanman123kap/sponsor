@@ -5,7 +5,13 @@ const sponsorModel = require("./models/sponsor.model");
 const cors = require("cors");
 const app = express();
 
-app.use(cors());
+app.use(cors(
+    {
+        origin: ["https://project1-lpbh.vercel.app"],
+        methods: ["POST", "GET"],
+        credentials: true
+    }
+));
 app.use(express.json());
 
 app.get("/", async (req, res) => {
