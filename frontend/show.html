@@ -65,7 +65,7 @@
                 html += `
                     <li>
                         <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${sponsor.id === amn._id ? `- Amount: ${amn.totalAmount}` : ''}
-                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children, amn) : ''}
+                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
             });
