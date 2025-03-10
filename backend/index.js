@@ -56,10 +56,11 @@ app.get("/show", async (req, res) => {
     try {
         const data = await sponsorModel.find();
         const amount = await amountModel.find();
-        const amn = amount.aggregate([{ 
+        const amn = await amount.aggregate([{ 
             $group: {
-                total: { 
-                    $sum: "$amount" 
+                _id: null,
+                total: {
+                    $sum: "$amount"
                 } 
             } 
         }]);
