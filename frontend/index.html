@@ -76,6 +76,7 @@
                 id: id,
                 name: name
             };
+            console.log(formData.sponsor_id);
 
             axios.post("https://sponsor-backend.vercel.app/form", formData).then((response) => {
                 alert("Entry Inserted!");
