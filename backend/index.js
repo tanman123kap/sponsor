@@ -34,9 +34,9 @@ app.post("/form", async (req, res) => {
     try {
         const { sponsor_id, id, name } = req.body;
         console.log(req.body.sponsor_id);
-        const user_id = await sponsorModel.exists({ sponsor_id });
+        const user_id = await sponsorModel.findOne({ id: sponsor_id });
         console.log(user_id);
-        if(user_id === true) {
+        if(user_id) {
             const formData = {
                 sponsor_id: Number(sponsor_id),
                 id: Number(id),
