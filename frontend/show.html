@@ -64,7 +64,7 @@
             sponsors.forEach((sponsor, amn) => {
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) - (Amount: ${sponsor.id === amn.id ? amn.totalAmount : null})
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${sponsor.id === amn.id ? `- Amount: ${amn.totalAmount}` : null}
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
