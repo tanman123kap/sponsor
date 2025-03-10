@@ -60,11 +60,15 @@
 
         // Function to recursively render the sponsor tree
         function renderSponsorTree(sponsors, amn) {
+            const amnm = amn.map(e => {
+                return e._id;
+            })
+            console.log(amnm);
             let html = '<ul>';
             sponsors.forEach(sponsor => {
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amn.find(e => sponsor.id === e._id) ? `- Amount: ${amn.totalAmount}` : ''}
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amnm.find(e => sponsor.id === e._id) ? `- Amount: ${amn.totalAmount}` : ''}
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
@@ -78,10 +82,6 @@
             axios.get("https://sponsor-backend.vercel.app/show").then((response) => {
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
                 const amn = response.data[1];
-                const amnm = amn.map(e => {
-                    return e._id;
-                })
-                console.log(amnm);
                 const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
                 const treeHtml = renderSponsorTree(sponsorTree, amn);  // Render the tree into HTML
                 console.log(sponsorTree);
