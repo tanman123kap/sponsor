@@ -65,7 +65,7 @@
                 html += `
                     <li>
                         <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amn.map(e => {
-                            return sponsor.id === amn._id;
+                            return sponsor.id === e._id;
                         }) ? `- Amount: ${amn.totalAmount}` : ''}
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
@@ -81,7 +81,7 @@
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
                 const amn = response.data[1];
                 const amnm = amn.map(e => {
-                    return amn._id;
+                    return e._id;
                 })
                 console.log(amnm);
                 const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
