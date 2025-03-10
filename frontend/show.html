@@ -80,6 +80,10 @@
             axios.get("https://sponsor-backend.vercel.app/show").then((response) => {
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
                 const amn = response.data[1];
+                const amnm = amn.map(e => {
+                    return amn._id;
+                })
+                console.log(amnm);
                 const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
                 const treeHtml = renderSponsorTree(sponsorTree, amn);  // Render the tree into HTML
                 console.log(sponsorTree);
