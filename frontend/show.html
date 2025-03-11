@@ -43,7 +43,7 @@
                 const amt = amountMap.get(sponsor.id);
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amt ? `Amount - ${amt.totalAmount}` : ""}
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amt ? `Amount - ${amt.totalAmount}` : `Amount - 0`}
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children, amountMap) : ''}
                     </li>
                 `;
