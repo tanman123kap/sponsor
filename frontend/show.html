@@ -60,16 +60,15 @@
 
         // Function to recursively render the sponsor tree
         function renderSponsorTree(sponsors, amn) {
-            let amount = (amn) => {
-                for(let i = 0; i < amn.length; i++) {
-                    return amn[i];
-                }
+            const findAmount = (sponsorId) => {
+                return amn.find(amnm => amnm._id === sponsorId);
             };
             let html = '<ul>';
             sponsors.forEach(sponsor => {
+                const amount = findAmount(sponsor.id);
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${sponsor.id === amount._id ? `- Amount: ${amn.totalAmount}` : ''}
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amount ? `- Amount: ${amount.totalAmount}` : ''}
                         ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
