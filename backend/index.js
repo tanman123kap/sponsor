@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors(
     {
-        origin: ["https://sponsor-frontend-two.vercel.app"],
+        origin: ["https://sponsor-backend.vercel.app"],
         methods: ["POST", "GET"],
         credentials: true
     }
