@@ -8,28 +8,6 @@
 </head>
 <body>
     <div id="show"></div>
-    <!-- <script>
-        // Fetch data from the '/show' API route when the page loads
-        window.onload = function() {
-            axios.get("http://localhost:5000/show").then((response) => {
-                // Display the sponsor data in a formatted way
-                const sponsors = response.data;
-                let htmlContent = '<ul>'; // Start an unordered list
-                sponsors.forEach(sponsor => {
-                    htmlContent += `
-                        <li>
-                            <strong>${sponsor.name}</strong> (Sponsor ID: ${sponsor.sponsor_id}, User ID: ${sponsor.id})
-                        </li>
-                    `;
-                });
-                htmlContent += '</ul>'; // Close the unordered list
-                document.getElementById("show").innerHTML = htmlContent;
-            }).catch((error) => {
-                console.error('Error fetching data:', error);
-                alert('Error loading sponsor data.');
-            });
-        };
-    </script> -->
     <script>
         // Function to transform the flat list of sponsors into a tree structure
         function buildSponsorTree(sponsors, amn) {
@@ -59,13 +37,14 @@
         }
 
         // Function to recursively render the sponsor tree
-        function renderSponsorTree(sponsors) {
+        function renderSponsorTree(sponsors, amountMap) {
             let html = '<ul>';
             sponsors.forEach(sponsor => {
+                const amt = amountMap.get(sponsor.id);
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id})
-                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amt ? `Amount - ${amt.totalAmount}` : ""}
+                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children, amountMap) : ''}
                     </li>
                 `;
             });
@@ -78,8 +57,13 @@
             axios.get("https://sponsor-backend.vercel.app/show").then((response) => {
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
                 const amn = response.data[1];
+                // Create a map of amounts for easy access by sponsor ID
+                const amountMap = new Map();
+                amn.forEach(amount => {
+                    amountMap.set(amount._id, amount);
+                });
                 const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
-                const treeHtml = renderSponsorTree(sponsorTree);  // Render the tree into HTML
+                const treeHtml = renderSponsorTree(sponsorTree, amountMap);  // Render the tree into HTML
                 console.log(sponsorTree);
                 document.getElementById("show").innerHTML = treeHtml;  // Display the tree on the page
             }).catch((error) => {
