@@ -66,6 +66,7 @@
             let html = '<ul>';
             sponsors.forEach(sponsor => {
                 const amount = findAmount(sponsor.id);
+                console.log(amount);
                 html += `
                     <li>
                         <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) ${amount ? `- Amount: ${amount.totalAmount}` : ''}
