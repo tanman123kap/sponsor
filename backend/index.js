@@ -20,24 +20,24 @@ app.get("/", async (req, res) => {
     try {
         res.status(200).sendFile(path.resolve(__dirname, "../frontend/index.html"));
     } catch (error) {
-        res.status(404).send("Not Found");
+        res.status(404).json(error);
     }
 });
 
-app.get("/show.html", async (req, res) => {
-    try {
-        res.status(200).sendFile(path.resolve(__dirname, "../frontend/show.html"));
-    } catch (error) {
-        res.status(404).send(error);
-    }
-});
+// app.get("/show.html", async (req, res) => {
+//     try {
+//         res.status(200).sendFile(path.resolve(__dirname, "../frontend/show.html"));
+//     } catch (error) {
+//         res.status(404).send(error);
+//     }
+// });
 
 app.post("/form", async (req, res) => {
     try {
         const { sponsor_id, id, name } = req.body;
-        const user_id = await sponsorModel.findOne({ id: sponsor_id });
-        console.log(user_id);
-        if(user_id) {
+        const user = await sponsorModel.findOne({ id: sponsor_id });
+        console.log(user);
+        if(user) {
             const formData = {
                 sponsor_id: Number(sponsor_id),
                 id: Number(id),
@@ -46,7 +46,7 @@ app.post("/form", async (req, res) => {
             const formEntry = await sponsorModel.create(formData);
             res.status(201).json(formEntry);
         } else {
-            res.status(404).json(`${user_id} not exist`);
+            res.status(404).json(`${sponsor_id} not exist`);
         }
     } catch (error) {
         res.status(422).json(error);
@@ -74,7 +74,7 @@ app.get("/show", async (req, res) => {
 app.post("/amount", async (req, res) => {
     try {
         const { id, amount } = req.body;
-        const user = await sponsorModel.find({id});
+        const user = await sponsorModel.findOne({ id });
         if(user) {
             const amn = {
                 id: id,
@@ -95,6 +95,6 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
     app.listen(5000, () => {
         console.log("Server Live at Port 5000...");
     });
-}).catch(() => {
-    console.log("Connection Failed...");
+}).catch((error) => {
+    console.log("Connection Failed...", error);
 });
