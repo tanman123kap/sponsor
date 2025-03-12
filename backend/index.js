@@ -1,9 +1,9 @@
+require('dotenv').config();
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
 const sponsorModel = require("./models/sponsor.model.js");
 const amountModel = require("./models/amount.model.js");
-require('dotenv').config();
 const cors = require("cors");
 const app = express();
 
