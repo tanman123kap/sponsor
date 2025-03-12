@@ -7,10 +7,11 @@ require('dotenv').config();
 const cors = require("cors");
 const app = express();
 
+//["https://sponsor-frontend-two.vercel.app"]
 app.use(cors(
     {
-        origin: ["https://sponsor-frontend-two.vercel.app"],
-        methods: ["POST", "GET"],
+        origin: "*",
+        methods: ["GET", "POST"],
         credentials: true
     }
 ));
