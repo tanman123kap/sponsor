@@ -90,7 +90,7 @@ app.post("/amount", async (req, res) => {
     }
 });
 
-mongoose.connect(process.env.MONGO_URI).then(() => {
+mongoose.connect(`${process.env.MONGO_URI}`).then(() => {
     console.log("Database Connected...");
     app.listen(5000, () => {
         console.log("Server Live at Port 5000...");
