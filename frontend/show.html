@@ -33,18 +33,38 @@
                     rootSponsors.push(sponsorMap.get(sponsor.id));
                 }
             });
+            amn.forEach(amount => {
+                sponsorMap.get(amount._id).amount = amount.totalAmount;
+            });
+            function calculateTotalAmount(sponsor) {
+                // Calculate total amount for this sponsor
+                let total = sponsor.amount || 0;
+    
+                // Recursively calculate the total for all children
+                sponsor.children.forEach(child => {
+                    total += calculateTotalAmount(child);
+                });
+    
+                // Add the total amount to the sponsor
+                sponsor.totalAmount = total;
+                return total;
+            }
+            // Calculate total amount for all root sponsors
+            rootSponsors.forEach(sponsor => {
+                calculateTotalAmount(sponsor);  // Calculate total for the sponsor and descendants
+            });
             return rootSponsors;  // Return the root nodes which form the tree
         }
 
         // Function to recursively render the sponsor tree
-        function renderSponsorTree(sponsors, amountMap) {
+        function renderSponsorTree(sponsors) {
             let html = '<ul>';
             sponsors.forEach(sponsor => {
-                const amt = amountMap.get(sponsor.id);
+                console.log(sponsor.totalAmount, sponsor.amount);
                 html += `
                     <li>
-                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) Amount - ${amt ? amt.totalAmount : '0'}
-                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children, amountMap) : ''}
+                        <strong>${sponsor.name}</strong> (ID: ${sponsor.id}) Amount - ${sponsor.amount} (TotalAmount - ${sponsor.totalAmount})
+                        ${sponsor.children.length > 0 ? renderSponsorTree(sponsor.children) : ''}
                     </li>
                 `;
             });
@@ -57,13 +77,8 @@
             axios.get("https://sponsor-backend.vercel.app/show").then((response) => {
                 const sponsors = response.data[0];  // Extract the sponsor data from the response
                 const amn = response.data[1];
-                // Create a map of amounts for easy access by sponsor ID
-                const amountMap = new Map();
-                amn.forEach(amount => {
-                    amountMap.set(amount._id, amount);
-                });
                 const sponsorTree = buildSponsorTree(sponsors, amn);  // Build the tree from the flat list
-                const treeHtml = renderSponsorTree(sponsorTree, amountMap);  // Render the tree into HTML
+                const treeHtml = renderSponsorTree(sponsorTree);  // Render the tree into HTML
                 console.log(sponsorTree);
                 document.getElementById("show").innerHTML = treeHtml;  // Display the tree on the page
             }).catch((error) => {
